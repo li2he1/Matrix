@@ -213,36 +213,20 @@ public class MainFragment extends Fragment implements OnMapReadyCallback, Report
         MapsInitializer.initialize(getContext());
         googleMap.setOnMarkerClickListener(this);
         this.googleMap = googleMap;
-        this.googleMap.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                        getActivity(), R.raw.style_json));
-
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.style_json));
         locationTracker = new LocationTracker(getActivity());
         locationTracker.getLocation();
 
         LatLng latLng = new LatLng(locationTracker.getLatitude(), locationTracker.getLongitude());
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(latLng)      // Sets the center of the map to Mountain View
-                .zoom(16)// Sets the zoom
-                .bearing(90)           // Sets the orientation of the camera to east
-                .tilt(30)                   // Sets the tilt of the camera to 30 degrees
-                .build();                   // Creates a CameraPosition from the builder
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(16) .bearing(90).tilt(30).build();
 
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        MarkerOptions marker = new MarkerOptions().position(latLng).
-                title("You");
-
-        // Changing marker icon
-        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.boy));
-
-        // adding marker
-        googleMap.addMarker(marker);
         loadEventInVisibleMap();
 
-
     }
+
 
 
     private String uploadEvent(String user_id, String editString, String event_type) {
@@ -373,7 +357,8 @@ public class MainFragment extends Fragment implements OnMapReadyCallback, Report
     private void loadEventInVisibleMap() {
         database.child("events").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                googleMap.clear();
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     TrafficEvent event = noteDataSnapshot.getValue(TrafficEvent.class);
                     double eventLatitude = event.getEvent_latitude();
@@ -383,9 +368,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback, Report
                     double centerLatitude = locationTracker.getLatitude();
                     double centerLongitude = locationTracker.getLongitude();
 
-
-                    int distance = Utils.distanceBetweenTwoLocations(centerLatitude, centerLongitude,
-                            eventLatitude, eventLongitude);
+                    int distance = Utils.distanceBetweenTwoLocations(centerLatitude, centerLongitude, eventLatitude, eventLongitude);
 
                     if (distance < 20) {
                         LatLng latLng = new LatLng(eventLatitude, eventLongitude);
@@ -408,11 +391,12 @@ public class MainFragment extends Fragment implements OnMapReadyCallback, Report
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //TODO: do something
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
+
 
 
 
@@ -517,6 +501,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback, Report
                 int number = Integer.parseInt(mEventTextLike.getText().toString());
                 database.child("events").child(mEvent.getId()).child("event_like_number").setValue(number + 1);
                 mEventTextLike.setText(String.valueOf(number + 1));
+                loadEventInVisibleMap();
             }
         });
 
