@@ -1,3 +1,4 @@
+![](matrix-demo.gif)
 # Matrix
 Mobile App
 An Android platform for drivers to share traffic condition events. 
