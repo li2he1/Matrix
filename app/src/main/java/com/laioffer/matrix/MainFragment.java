@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
+import static com.laioffer.matrix.Config.listItems;
 
 
 /**
@@ -328,27 +329,27 @@ public class MainFragment extends Fragment implements OnMapReadyCallback, Report
                 break;
             }
             case REQ_CODE_SPEECH_INPUT: {
-                showDialog("Traffic", "there is a traffic ahead");
-//                if (resultCode == RESULT_OK && null != data) {
-//
-//                    ArrayList<String> result = data
-//                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-//                    if (result.size() > 0) {
-//                        final String sentence = result.get(0);
-//                        boolean isMatch = false;
-//                        for (int i = 0; i < listItems.size(); i++) {
-//                            final String label = listItems.get(i).getDrawable_label();
-//                            if (sentence.toLowerCase().contains(label.toLowerCase())) {
-//                                showDialog(label, sentence);
-//                                isMatch = true;
-//                                break;
-//                            }
-//                        }
-//                        if (!isMatch) {
-//                            askSpeechInput("Try again");
-//                        }
-//                    }
-//                }
+//                showDialog("Traffic", "there is a traffic ahead");
+                if (resultCode == RESULT_OK && null != data) {
+
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (result.size() > 0) {
+                        final String sentence = result.get(0);
+                        boolean isMatch = false;
+                        for (int i = 0; i < listItems.size(); i++) {
+                            final String label = listItems.get(i).getDrawable_label();
+                            if (sentence.toLowerCase().contains(label.toLowerCase())) {
+                                showDialog(label, sentence);
+                                isMatch = true;
+                                break;
+                            }
+                        }
+                        if (!isMatch) {
+                            askSpeechInput("Try again");
+                        }
+                    }
+                }
                 break;
             }
             default:
