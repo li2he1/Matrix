@@ -1,4 +1,4 @@
-![](matrix-demo.gif)
+
 # Matrix
 Mobile App
 An Android platform for drivers to share traffic condition events. 
@@ -16,3 +16,5 @@ A user-friendly UI with standard widgets (RecyclerView, ViewPager, etc) and  Esp
 MD5 encryption and Google Firebase Authentication to improve data security 
 
 In-App simple voice control with Google Speech Recognition to provide hand-free event reports
+
+![](matrix-demo.gif)
